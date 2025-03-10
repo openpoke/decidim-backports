@@ -56,7 +56,7 @@ GIT
 
 GIT
   remote: https://github.com/openpoke/decidim.git
-  revision: 9ebcdc1ad841eb27f859579b1a9866588d38c615
+  revision: 7c5cc07521eb415d0c03f85090f72edcd320f75f
   branch: backport/0.27/feature/waitlist-for-full-meetings
   specs:
     decidim (0.27.9)
