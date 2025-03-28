@@ -8,7 +8,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y ca-certificates c
     apt-get update && apt-get install -y nodejs yarn \
     build-essential \
     postgresql-client \
-    p7zip-full \
+    p7zip \
     libpq-dev && \
     apt-get clean
 
@@ -90,7 +90,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y ca-certificates c
     postgresql-client \
     imagemagick \
     curl \
-    p7zip-full \
+    p7zip \
     supervisor && \
     apt-get clean
 
@@ -102,13 +102,6 @@ ENV RAILS_ENV production
 
 ARG RUN_RAILS
 ARG RUN_SIDEKIQ
-ARG COMMIT_SHA
-ARG COMMIT_TIME
-ARG COMMIT_VERSION
-
-ENV COMMIT_SHA ${COMMIT_SHA}
-ENV COMMIT_TIME ${COMMIT_TIME}
-ENV COMMIT_VERSION ${COMMIT_VERSION}
 
 # Add user
 RUN addgroup --system --gid 1000 app && \
@@ -129,7 +122,7 @@ RUN npm install --omit=dev
 
 USER app
 HEALTHCHECK --interval=1m --timeout=5s --start-period=30s \
-    CMD (curl -sSH "Content-Type: application/json" -d '{"query": "{ decidim { version } }"}' http://localhost:3000/api) || exit 1
+    CMD (curl -sS http://localhost:3000/health_check | grep success) || exit 1
 
 ENTRYPOINT ["/app/entrypoint.sh"]
 CMD ["/usr/bin/supervisord"]
